@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,6 +18,7 @@ import com.example.ws.shared.GenericMessage;
 import com.example.ws.shared.Messages;
 import com.example.ws.user.dto.UserCreate;
 import com.example.ws.user.exception.ActivationNotificationException;
+import com.example.ws.user.exception.InavalidExceptionToken;
 import com.example.ws.user.exception.NotUniqueEmailException;
 
 import jakarta.validation.Valid;
@@ -32,12 +35,22 @@ public class UserController
    //MessageSource messageSource;
 
     @PostMapping("/api/v1/users")
-    GenericMessage creatUser(@Valid @RequestBody UserCreate user)
+    GenericMessage createUser(@Valid @RequestBody UserCreate user)
     {
         userService.save(user.toUser());
         String message = Messages.getMessageForLocale("hoaxify.create.user.success.message", LocaleContextHolder.getLocale());
         return new GenericMessage(message);
     }
+
+
+    @PatchMapping("/api/v1/users/{token}/activate")
+    GenericMessage activatetUser(@PathVariable String token)
+    {
+        userService.activateUser(token);
+        String message = Messages.getMessageForLocale("hoaxify.activate.user.success.message", LocaleContextHolder.getLocale());
+        return new GenericMessage(message);
+    }
+
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     ResponseEntity<ApiError> handleMethodArgNotValidEx(MethodArgumentNotValidException exception)
@@ -75,6 +88,17 @@ public class UserController
         apiError.setMessage(exception.getMessage());
         apiError.setStatus(502);
         return ResponseEntity.status(502).body(apiError);
+
+    }
+
+    @ExceptionHandler(InavalidExceptionToken.class)
+    ResponseEntity<ApiError> handleExceptionToken(ActivationNotificationException exception)
+    {
+        ApiError apiError = new ApiError();
+        apiError.setPath("/api/v1/users");
+        apiError.setMessage(exception.getMessage());
+        apiError.setStatus(400);
+        return ResponseEntity.status(400).body(apiError);
 
     }
 

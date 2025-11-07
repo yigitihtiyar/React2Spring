@@ -10,6 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.example.ws.email.EmailService;
 import com.example.ws.user.exception.ActivationNotificationException;
+import com.example.ws.user.exception.InavalidExceptionToken;
 import com.example.ws.user.exception.NotUniqueEmailException;
 
 import jakarta.transaction.Transactional;
@@ -40,6 +41,18 @@ public class UserService {
       throw new ActivationNotificationException();
     }
 
+  }
+
+  public void activateUser(String token) 
+  {
+   User user = userRepository.findByActivationToken(token);
+   if (user == null)
+   {
+     throw new InavalidExceptionToken();
+   }
+   user.setActive(true);
+   user.setActivationToken(null);
+   userRepository.save(user);
   }
 
 
