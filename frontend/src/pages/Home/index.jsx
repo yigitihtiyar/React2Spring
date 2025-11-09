@@ -1,4 +1,6 @@
+import { UserList } from "./components/UserList";
+
 export function HomePage(){
 
-    return <h1>Home Page</h1>
+    return <UserList />;
 }
