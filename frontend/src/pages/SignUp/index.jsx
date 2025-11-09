@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { signUp } from "./api";
 import { Input } from "./components/Input";
 import { useTranslation } from "react-i18next";
+import { Alert } from "@/shared/components/Alert";
 
 
 export function SignUp() {
@@ -117,11 +118,11 @@ export function SignUp() {
             />
 
             {successMessage && (
-              <div className="alert alert-success">{successMessage}</div>
+             <Alert>{successMessage}</Alert>
             )}
 
             {generalerror && (
-              <div className="alert alert-danger">{generalerror}</div>
+             <Alert styleType = "danger">{generalerror}</Alert>
             )}
 
             <div className="text-center">
@@ -132,10 +133,7 @@ export function SignUp() {
                 }
               >
                 {apiProgress && (
-                  <span
-                    className="spinner-border spinner-border-sm"
-                    aria-hidden="true"
-                  ></span>
+                  <Spinner sm={true} />
                 )}
                 {t("signUp")}
               </button>
