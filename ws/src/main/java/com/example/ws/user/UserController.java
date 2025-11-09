@@ -1,18 +1,22 @@
 package com.example.ws.user;
 
 
+import java.util.List;
 import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.example.ws.error.ApiError;
 import com.example.ws.shared.GenericMessage;
 import com.example.ws.shared.Messages;
@@ -22,6 +26,7 @@ import com.example.ws.user.exception.InavalidExceptionToken;
 import com.example.ws.user.exception.NotUniqueEmailException;
 
 import jakarta.validation.Valid;
+
 
 
 
@@ -50,6 +55,18 @@ public class UserController
         String message = Messages.getMessageForLocale("hoaxify.activate.user.success.message", LocaleContextHolder.getLocale());
         return new GenericMessage(message);
     }
+
+    @GetMapping("/api/v1/users")
+    List<User> getUsers()
+    {
+        return userService.getUsers();
+    }
+    
+
+    
+
+
+
 
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
