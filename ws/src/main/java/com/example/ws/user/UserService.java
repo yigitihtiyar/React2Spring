@@ -1,16 +1,19 @@
 package com.example.ws.user;
 
-import java.util.List;
+
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.mail.MailException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.ws.email.EmailService;
+import com.example.ws.user.dto.UserProjection;
 import com.example.ws.user.exception.ActivationNotificationException;
 import com.example.ws.user.exception.InavalidExceptionToken;
 import com.example.ws.user.exception.NotUniqueEmailException;
@@ -54,9 +57,8 @@ public class UserService {
     userRepository.save(user);
   }
 
-  public List<User> getUsers() {
-
-    return userRepository.findAll();
+  public Page<UserProjection> getUsers(Pageable page) {
+    return userRepository.getAllUserRecords(page);
   }
 
 }

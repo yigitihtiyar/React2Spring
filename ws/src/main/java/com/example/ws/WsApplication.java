@@ -30,7 +30,12 @@ public class WsApplication {
 				user.setEmail("user" + i + "@mail.com");
 				user.setPassword(passwordEncoder.encode("P4ssword"));
 				user.setActive(true);
+				user.setFirstName("first" + i );
+				user.setLastName("last" +i);
 				userRepository.save(user);
+				if ( i == 1 ){
+					user.setImage("my-profile-image.png");
+				}
 
 			}
 			throw new UnsupportedOperationException("Unimplemented method 'run'");

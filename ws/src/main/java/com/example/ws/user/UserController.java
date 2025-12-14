@@ -1,11 +1,12 @@
 package com.example.ws.user;
 
 
-import java.util.List;
-import java.util.stream.Collectors;
 
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -21,6 +22,7 @@ import com.example.ws.error.ApiError;
 import com.example.ws.shared.GenericMessage;
 import com.example.ws.shared.Messages;
 import com.example.ws.user.dto.UserCreate;
+import com.example.ws.user.dto.UserProjection;
 import com.example.ws.user.exception.ActivationNotificationException;
 import com.example.ws.user.exception.InavalidExceptionToken;
 import com.example.ws.user.exception.NotUniqueEmailException;
@@ -57,16 +59,13 @@ public class UserController
     }
 
     @GetMapping("/api/v1/users")
-    List<User> getUsers()
+    Page<UserProjection> getUsers(Pageable page)
     {
-        return userService.getUsers();
+        return userService.getUsers(page);
     }
     
 
     
-
-
-
 
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
