@@ -4,9 +4,9 @@ import org.springframework.context.i18n.LocaleContextHolder;
 
 import com.example.ws.shared.Messages;
 
-public class InavalidExceptionToken  extends RuntimeException
+public class InvalidTokenException  extends RuntimeException
 {
-    public InavalidExceptionToken()
+    public InvalidTokenException()
     {
         super(Messages.getMessageForLocale("hoafixy.activate.user.invalid.token", LocaleContextHolder.getLocale()));
     }

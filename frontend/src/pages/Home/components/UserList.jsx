@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { loadUsers } from "./api";
 import { useCallback } from "react";
 import { Spinner } from "@/shared/components/Spinner";
+import { UserListItem } from "./UserListItem";
 
 export function UserList() {
   const [userPage, setUserPage] = useState({
@@ -35,9 +36,7 @@ export function UserList() {
       <ul className="list-group list-group-flush">
         {userPage.content.map((user) => {
           return (
-            <li className="list-group-item list-group-item-action">
-              {user.username}
-            </li>
+           <UserListItem key={user.id} user={user} />
           );
         })}
       </ul>

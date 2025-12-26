@@ -8,7 +8,7 @@ export function Activation() {
 
   const [apiProgress, setApiProgress] = useState();
   const [successMessage, setSuccessMessage] = useState();
-  const [errorMessage, SetErrorMessage] = useState();
+  const [errorMessage, setErrorMessage] = useState();
 
   useEffect(() => {
     async function activate() {
@@ -17,7 +17,7 @@ export function Activation() {
         const response = await activateUser(token);
         setSuccessMessage(response.data.message);
       } catch (axiosError) {
-        SetErrorMessage(axiosError.response.data.message);
+        setErrorMessage(axiosError.response.data.message);
       } finally {
         setApiProgress(false);
       }

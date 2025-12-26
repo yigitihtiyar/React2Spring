@@ -17,16 +17,18 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.example.ws.error.ApiError;
 import com.example.ws.shared.GenericMessage;
 import com.example.ws.shared.Messages;
 import com.example.ws.user.dto.UserCreate;
-import com.example.ws.user.dto.UserProjection;
+import com.example.ws.user.dto.UserDTO;
 import com.example.ws.user.exception.ActivationNotificationException;
-import com.example.ws.user.exception.InavalidExceptionToken;
+import com.example.ws.user.exception.InvalidTokenException;
+import com.example.ws.user.exception.NotFoundException;
 import com.example.ws.user.exception.NotUniqueEmailException;
 
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 
@@ -59,11 +61,16 @@ public class UserController
     }
 
     @GetMapping("/api/v1/users")
-    Page<UserProjection> getUsers(Pageable page)
+    Page<UserDTO> getUsers(Pageable page)
     {
-        return userService.getUsers(page);
+        return userService.getUsers(page).map(UserDTO::new);
     }
-    
+
+    @GetMapping("/api/v1/users/{id}")
+    UserDTO getUserById(@PathVariable long id)
+    {
+        return new UserDTO(userService.getUser(id));
+    }
 
     
 
@@ -107,14 +114,25 @@ public class UserController
 
     }
 
-    @ExceptionHandler(InavalidExceptionToken.class)
-    ResponseEntity<ApiError> handleExceptionToken(ActivationNotificationException exception)
+    @ExceptionHandler(InvalidTokenException.class)
+    ResponseEntity<ApiError> handleExceptionToken(InvalidTokenException exception, HttpServletRequest request)
     {
         ApiError apiError = new ApiError();
-        apiError.setPath("/api/v1/users");
+        apiError.setPath(request.getRequestURI());
         apiError.setMessage(exception.getMessage());
         apiError.setStatus(400);
         return ResponseEntity.status(400).body(apiError);
+
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    ResponseEntity<ApiError> handleEntityNotFoundExceptionToken(NotFoundException exception, HttpServletRequest request)
+    {
+        ApiError apiError = new ApiError();
+        apiError.setPath(request.getRequestURI());
+        apiError.setMessage(exception.getMessage());
+        apiError.setStatus(404);
+        return ResponseEntity.status(404).body(apiError);
 
     }
 

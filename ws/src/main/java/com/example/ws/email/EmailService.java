@@ -39,7 +39,7 @@ public class EmailService {
       <html>
           <body>
               <h1>${title}</h1>
-              <a href="%s"${url}>${clikHere}</a>
+                <a href="${url}">${clickHere}</a>
           </body>
       </html>
       """;

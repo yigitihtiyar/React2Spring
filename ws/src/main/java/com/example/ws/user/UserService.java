@@ -11,11 +11,10 @@ import org.springframework.mail.MailException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import com.example.ws.email.EmailService;
-import com.example.ws.user.dto.UserProjection;
 import com.example.ws.user.exception.ActivationNotificationException;
-import com.example.ws.user.exception.InavalidExceptionToken;
+import com.example.ws.user.exception.InvalidTokenException;
+import com.example.ws.user.exception.NotFoundException;
 import com.example.ws.user.exception.NotUniqueEmailException;
 
 import jakarta.transaction.Transactional;
@@ -50,15 +49,20 @@ public class UserService {
   public void activateUser(String token) {
     User user = userRepository.findByActivationToken(token);
     if (user == null) {
-      throw new InavalidExceptionToken();
+      throw new InvalidTokenException();
     }
     user.setActive(true);
     user.setActivationToken(null);
     userRepository.save(user);
   }
 
-  public Page<UserProjection> getUsers(Pageable page) {
-    return userRepository.getAllUserRecords(page);
+  public Page<User> getUsers(Pageable page) {
+    return userRepository.findAll(page);
+  }
+
+  public User getUser(long id) {
+    return userRepository.findById(id).orElseThrow(() -> new NotFoundException(id));
+ 
   }
 
 }
