@@ -1,63 +1,24 @@
-import { Component } from "react"
-import { useParams } from "react-router-dom"
+import { Component } from "react";
 import { getUser } from "./api";
-import { withTranslation } from "react-i18next";
+import { useRouteParamApiRequest } from "@/shared/hooks/useRouteParamApiRequest";
+import { ProfileCard } from "./components/ProfileCard";
 
+export function User() {
+  const {
+    apiProgress,
+    data: user,
+    error,
+  } = useRouteParamApiRequest("id", getUser);
 
-export class UserClass extends Component
-{
-
-    state = {
-        user:null,
-        apiProgress : false,
-        error : null
-    }
-
-  async componentDidMount() 
-  {
-    this.setState({apiProgress:true})
-    try {
-        
-        const response = await getUser(this.props.id);
-        this.setState({
-        user : response.data
-    })
-    // eslint-disable-next-line no-unused-vars
-    } catch (axiosError)
-    {
-        this.setState({
-            error : this.props.t("userNotFoundError"),
-        })
-    }
-     finally {
-        this.setState({apiProgress:false})
-    }
-   
-  }
-
-  render()
-  {
-    return <>
-
-    {this.state.user && <h1>{this.state.user.username}</h1>}
-
-     {this.state.apiProgress && (
-            <Alert styleType="secondary" center>
-             <Spinner />
-            </Alert>
-          )}
-
-      {this.state.error && <Alert styleType="danger">{this.state.error}</Alert>}
-
+  return (
+    <>
+      {apiProgress && (
+        <Alert styleType="secondary" center>
+          <Spinner />
+        </Alert>
+      )}
+      {user && <ProfileCard user={user} />}
+      {error && <Alert styleType="danger">{error}</Alert>}
     </>
-  }
-}
-
-const UserPageWidthTranslation = withTranslation()(UserClass);
-
-
-export function User()
-{
-  const {id} = useParams();
-  return <UserPageWidthTranslation id={id}  />
+  );
 }
