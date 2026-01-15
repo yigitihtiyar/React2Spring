@@ -1,4 +1,3 @@
-import { Component } from "react";
 import { getUser } from "./api";
 import { useRouteParamApiRequest } from "@/shared/hooks/useRouteParamApiRequest";
 import { ProfileCard } from "./components/ProfileCard";

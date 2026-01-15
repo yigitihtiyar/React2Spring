@@ -12,6 +12,11 @@ export function Navbar() {
           </Link>
           <ul className="navbar-nav">
             <li className="navbar-item">
+              <Link className="nav-link" to="/login">
+                {t("login")}
+              </Link>
+            </li>
+                <li className="navbar-item">
               <Link className="nav-link" to="/signup">
                 {t("signUp")}
               </Link>
