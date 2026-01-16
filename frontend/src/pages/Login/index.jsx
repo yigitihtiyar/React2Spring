@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Alert } from "@/shared/components/Alert";
 import { Input } from "../../shared/components/Input";
+import { login } from "./api";
+
 
 export function Login() {
   const [email, setEmail] = useState();
@@ -35,24 +37,21 @@ export function Login() {
     setApiProgress(true);
 
     try {
-      //   const response = await signUp({
-      //     email,
-      //     password,
-      //   });
-      //   setSuccessMessage(response.data.message);
+      await login({email,password})
+
     } catch (axiosError) {
       console.log(axiosError);
-      //   if (axiosError.response?.data) {
-      //     if (axiosError.response.data.status === 400) {
-      //       setErrors(axiosError.response.data.validationErrors);
-      //     } else {
-      //       setErrors(axiosError.response.data.message);
-      //     }
-      //   } else {
-      //     setGeneralError(t("genericError"));
-      //   }
+      if (axiosError.response?.data) {
+        if (axiosError.response.data.status === 400) {
+          setErrors(axiosError.response.data.validationErrors);
+        } else {
+          setErrors(axiosError.response.data.message);
+        }
+      } else {
+        setGeneralError(t("genericError"));
+      }
     } finally {
-      //   setApiProgress(false);
+      setApiProgress(false);
     }
   };
 
