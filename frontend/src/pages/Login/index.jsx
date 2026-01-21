@@ -3,15 +3,21 @@ import { useTranslation } from "react-i18next";
 import { Alert } from "@/shared/components/Alert";
 import { Input } from "../../shared/components/Input";
 import { login } from "./api";
+import { AuthContext, useAuthDispatch } from "@/shared/state/context";
+import { useNavigate } from "react-router-dom";
 
 
 export function Login() {
+  
+  const navigate = useNavigate();
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const [apiProgress, setApiProgress] = useState(false);
   const [errors, setErrors] = useState({});
   const [generalerror, setGeneralError] = useState();
   const { t } = useTranslation();
+  const dispatch = useAuthDispatch();
+  
 
   useEffect(() => {
     setErrors(function (lastErrors) {
@@ -37,9 +43,11 @@ export function Login() {
     setApiProgress(true);
 
     try {
-      await login({email,password})
+      const response = await login({email,password});
+      dispatch({type:'login-success',data:response.data.user});
+      navigate("/");
 
-    } catch (axiosError) {
+    }catch (axiosError) {
       console.log(axiosError);
       if (axiosError.response?.data) {
         if (axiosError.response.data.status === 400) {
