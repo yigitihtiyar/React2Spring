@@ -1,14 +1,20 @@
 import { useTranslation } from "react-i18next";
-import { AuthContext, useAuthDispatch, useAuthState } from "../state/Context";
+import { AuthContext} from "../state/Context";
+import { useDispatch, useSelector } from "react-redux";
+import { logoutSuccess } from "../state/redux";
 
 export function Navbar() {
   const { t } = useTranslation();
-  const authState = useAuthState();
-  const  dispatch = useAuthDispatch();
+  //const authState = useAuthState();
+  //const  dispatch = useAuthDispatch();
+  const authState = useSelector((store) => store.auth);
+  const dispatch = useDispatch();
+
 
  const onClickLogout = () => {
-  dispatch({type:'logout-success'});
+  dispatch(logoutSuccess());
  }
+
 
   return (
     <>

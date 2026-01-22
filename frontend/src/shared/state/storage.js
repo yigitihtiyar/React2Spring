@@ -13,3 +13,20 @@ export function loadAuthState() {
   }
 }
 
+
+ export function cardState(card)
+ {
+   localStorage.setItem("card",JSON.stringify(card));
+ }
+
+ export function loadCardState()
+ {
+   const defaultState = {items : {} , totalPrice:0};
+   const cardStateInStorage = localStorage.getItem("card");
+  if(!cardStateInStorage) return defaultState;
+  try {
+     return JSON.parse(cardStateInStorage);
+   } catch {
+     return defaultState;   
+    }
+ }
