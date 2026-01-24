@@ -2,6 +2,7 @@ import { useTranslation } from "react-i18next";
 import { AuthContext} from "../state/Context";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutSuccess } from "../state/redux";
+import { ProfileImage } from "./ProfileImage";
 
 export function Navbar() {
   const { t } = useTranslation();
@@ -42,7 +43,8 @@ export function Navbar() {
               <>
                 <li className="navbar-item">
                   <Link className="nav-link" to={`/user/${authState.id}`}>
-                    MyProfile
+                    <ProfileImage width={30} />
+                    <span className="ms-1">{authState.username}</span>
                   </Link>
                 </li>
                 <li className="navbar-item">
