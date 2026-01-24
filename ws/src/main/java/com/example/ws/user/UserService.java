@@ -2,17 +2,14 @@ package com.example.ws.user;
 
 
 import java.util.UUID;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.mail.MailException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.example.ws.email.EmailService;
-import com.example.ws.user.dto.UserDTO;
 import com.example.ws.user.dto.UserUpdate;
 import com.example.ws.user.exception.ActivationNotificationException;
 import com.example.ws.user.exception.InvalidTokenException;
@@ -24,10 +21,11 @@ import jakarta.transaction.Transactional;
 @Service
 public class UserService {
 
-  @Autowired // DI
+  @Autowired 
   UserRepository userRepository;
 
-  PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();// password hashing
+  @Autowired
+  PasswordEncoder passwordEncoder;
 
   @Autowired
   EmailService emailService;

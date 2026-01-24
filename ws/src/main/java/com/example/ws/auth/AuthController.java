@@ -4,14 +4,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.ws.auth.dto.AuthResponse;
 import com.example.ws.auth.dto.Credentials;
-import com.example.ws.auth.exception.AuthenticationException;
-import com.example.ws.error.ApiError;
-
 import jakarta.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 

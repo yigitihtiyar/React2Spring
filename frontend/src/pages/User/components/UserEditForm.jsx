@@ -26,7 +26,8 @@ export function UserEditForm({ setEditMode }) {
     setNewUsername(authState.username);
   };
 
-  const onClickSave = async () => {
+  const onSubmit= async (event) => {
+    event.preventDefault();
     setApiProgress(true);
     setErrors({});
     setGeneralError();
@@ -52,7 +53,7 @@ export function UserEditForm({ setEditMode }) {
   };
 
   return (
-    <>
+    <form onSubmit={onSubmit}>
       <Input
         label={t("username")}
         defultValue={authState.username}
@@ -60,13 +61,13 @@ export function UserEditForm({ setEditMode }) {
         error={errors.username}
       />
       {generalerror && <Alert styleType="danger">{generalerror}</Alert>}
-      <Button apiProgress={apiProgress} onClick={onClickSave}>
+      <Button apiProgress={apiProgress}  type="submit">
         Save
       </Button>
       <div className="d-inline m-1"></div>
-      <Button styleType="outline-secondary" onClick={onClickCancel}>
+      <Button styleType="outline-secondary" onClick={onClickCancel} type="button">
         Cancel
       </Button>
-    </>
+    </form>
   );
 }
