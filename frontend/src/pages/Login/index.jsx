@@ -4,10 +4,8 @@ import { Alert } from "@/shared/components/Alert";
 import { Input } from "../../shared/components/Input";
 import { login } from "./api";
 import { AuthContext } from "@/shared/state/context";
-import { useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { loginSuccess } from "@/shared/state/redux";
-
 
 export function Login() {
   
@@ -47,8 +45,8 @@ export function Login() {
 
     try {
       const response = await login({email,password});
-      //dispatch({type:'login-success',data:response.data.user});
-      dispatch(loginSuccess(response.data.user));
+      dispatch({type:'login-success',data:response.data});
+      //dispatch(loginSuccess({type:'login-success',data:response.data}));
       navigate("/");
 
     }catch (axiosError) {

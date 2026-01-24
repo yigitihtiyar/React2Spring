@@ -3,6 +3,7 @@ import { loadAuthState, storeAuthState } from "./storage";
 import { useReducer } from "react";
 import { useEffect } from "react";
 import { useContext } from "react";
+import { setToken } from "@/lib/http";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const AuthContext = createContext();
@@ -23,7 +24,8 @@ export function useAuthDispatch() {
 const authReducer = (authState, action) => {
   switch (action.type) {
     case "login-success":
-      return action.data;
+      setToken(action.data.token);
+      return action.data.user;
 
     case "logout-success":
       return { id: 0 };
