@@ -2,6 +2,7 @@ package com.example.ws.error;
 
 
 import java.util.stream.Collectors;
+
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import com.example.ws.auth.exception.AuthenticationException;
 import com.example.ws.shared.Messages;
 import com.example.ws.user.exception.ActivationNotificationException;
+import com.example.ws.user.exception.AuthorizationException;
 import com.example.ws.user.exception.InvalidTokenException;
 import com.example.ws.user.exception.NotFoundException;
 import com.example.ws.user.exception.NotUniqueEmailException;
@@ -27,7 +29,8 @@ public class ErrorHandler {
             ActivationNotificationException.class,
             InvalidTokenException.class,
             NotFoundException.class,
-            AuthenticationException.class
+            AuthenticationException.class,
+            AuthorizationException.class
     })
     ResponseEntity<ApiError> handleException(Exception exception, HttpServletRequest request) {
         ApiError apiError = new ApiError();
@@ -54,6 +57,8 @@ public class ErrorHandler {
             apiError.setStatus(404);
         } else if (exception instanceof AuthenticationException) {
             apiError.setStatus(401);
+        }else if (exception instanceof AuthorizationException){
+            apiError.setStatus(403);
         }
 
         return ResponseEntity.status(apiError.getStatus()).body(apiError);

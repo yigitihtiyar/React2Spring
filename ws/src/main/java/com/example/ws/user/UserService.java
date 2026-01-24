@@ -12,6 +12,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.example.ws.email.EmailService;
+import com.example.ws.user.dto.UserDTO;
+import com.example.ws.user.dto.UserUpdate;
 import com.example.ws.user.exception.ActivationNotificationException;
 import com.example.ws.user.exception.InvalidTokenException;
 import com.example.ws.user.exception.NotFoundException;
@@ -56,8 +58,14 @@ public class UserService {
     userRepository.save(user);
   }
 
-  public Page<User> getUsers(Pageable page) {
-    return userRepository.findAll(page);
+  public Page<User> getUsers(Pageable page,User loggedInUser) {
+    if(loggedInUser == null)
+      {
+         return userRepository.findAll(page);
+      }
+
+      return userRepository.findByIdNot(loggedInUser.getId(),page);
+   
   }
 
   public User getUser(long id) {
@@ -67,6 +75,14 @@ public class UserService {
 
   public User findByEmail(String email) {
     return userRepository.findByEmail(email);
+  }
+
+  public User updateUser(long id, UserUpdate userUpdate) {
+   
+      User inDB = getUser(id);
+      inDB.setUsername(userUpdate.username());
+      return userRepository.save(inDB);
+   
   }
 
 }
