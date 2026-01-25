@@ -9,6 +9,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.mail.MailException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import com.example.ws.configuration.CurrentUser;
 import com.example.ws.email.EmailService;
 import com.example.ws.user.dto.UserUpdate;
 import com.example.ws.user.exception.ActivationNotificationException;
@@ -56,13 +58,13 @@ public class UserService {
     userRepository.save(user);
   }
 
-  public Page<User> getUsers(Pageable page,User loggedInUser) {
-    if(loggedInUser == null)
+  public Page<User> getUsers(Pageable page,CurrentUser currentUser) {
+    if(currentUser == null)
       {
          return userRepository.findAll(page);
       }
 
-      return userRepository.findByIdNot(loggedInUser.getId(),page);
+      return userRepository.findByIdNot(currentUser.getId(),page);
    
   }
 
