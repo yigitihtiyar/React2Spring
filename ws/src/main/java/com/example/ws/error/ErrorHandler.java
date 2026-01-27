@@ -16,7 +16,7 @@ import com.example.ws.user.exception.NotFoundException;
 import com.example.ws.user.exception.NotUniqueEmailException;
 import jakarta.servlet.http.HttpServletRequest;
 
-@RestControllerAdvice // bütün denetleyiciler için bir servis
+@RestControllerAdvice
 public class ErrorHandler {
 
     @ExceptionHandler({ MethodArgumentNotValidException.class,

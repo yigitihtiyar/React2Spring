@@ -7,7 +7,7 @@ import { Alert } from "@/shared/components/Alert";
 import { useSelector } from "react-redux";
 import { updateUser } from "./api";
 
-export function UserEditForm({ setEditMode }) {
+export function UserEditForm({ setEditMode, setTempImage }) {
   const { t } = useTranslation();
   const authState = useSelector((store) => store.auth);
   const [newUsername, setNewUsername] = useState(authState.username);
@@ -15,6 +15,7 @@ export function UserEditForm({ setEditMode }) {
   const [errors, setErrors] = useState({});
   const [generalerror, setGeneralError] = useState();
   const dispatch = useAuthDispatch();
+  const [newImage, setNewImage] = useState();
 
   const onChangeUsername = (event) => {
     setNewUsername(event.target.value);
@@ -24,7 +25,24 @@ export function UserEditForm({ setEditMode }) {
   const onClickCancel = () => {
     setEditMode(false);
     setNewUsername(authState.username);
+    setNewImage();
+    setTempImage();
   };
+
+  const onSelectImage = (event) => 
+    {
+    if(event.target.files.length<1) return;
+     const file = event.target.files[0];
+     const fileReader = new FileReader();
+
+     fileReader.onloadend = () => {
+         const data = fileReader.result
+         setNewImage(data);
+         setTempImage(data);
+     }
+     fileReader.readAsDataURL(file);
+     
+    }
 
   const onSubmit= async (event) => {
     event.preventDefault();
@@ -32,10 +50,10 @@ export function UserEditForm({ setEditMode }) {
     setErrors({});
     setGeneralError();
     try {
-      await updateUser(authState.id, { username: newUsername });
+      await updateUser(authState.id, { username: newUsername, image: newImage});
       dispatch({
         type: "user-update-success",
-        data: { username: newUsername },
+        data: { username: newUsername, image: newImage },
       });
     } catch (axiosError) {
       if (axiosError.response?.data) {
@@ -60,6 +78,12 @@ export function UserEditForm({ setEditMode }) {
         onChange={onChangeUsername}
         error={errors.username}
       />
+      <Input
+      label = "Profile Image"
+      type = "file"
+      onChange = {onSelectImage}
+      
+      ></Input>
       {generalerror && <Alert styleType="danger">{generalerror}</Alert>}
       <Button apiProgress={apiProgress}  type="submit">
         Save

@@ -81,6 +81,7 @@ public class UserService {
    
       User inDB = getUser(id);
       inDB.setUsername(userUpdate.username());
+      inDB.setImage(userUpdate.image());
       return userRepository.save(inDB);
    
   }

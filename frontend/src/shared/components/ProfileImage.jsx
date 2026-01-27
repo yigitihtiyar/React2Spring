@@ -1,12 +1,13 @@
 import defaultProfileImage from "@/assets/profile.png";
 
-export function ProfileImage({width})
+export function ProfileImage({width,tempImage,image})
 {
     return (
           <img
-            src={defaultProfileImage}
+            src={tempImage || image || defaultProfileImage}
             width={width}
-            className="img-fluid rounded-circle shadow-sm"
+            height={width}
+            className="rounded-circle shadow-sm"
          />
     )
 }

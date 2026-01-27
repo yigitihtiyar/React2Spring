@@ -2,7 +2,6 @@ import { Button } from "@/shared/components/Button";
 import { AuthContext } from "@/shared/state/Context";
 import { useSelector } from "react-redux";
 import { useState } from "react";
-import { Alert } from "@/shared/components/Alert";
 import { ProfileImage } from "@/shared/components/ProfileImage";
 import { UserEditForm } from "./UserEditForm";
 
@@ -10,6 +9,7 @@ export function ProfileCard({ user }) {
   //const authState = useAuthState();
   const authState = useSelector((store) => store.auth);
   const [editMode, setEditMode] = useState(false);
+  const [tempImage , setTempImage] = useState();
 
   const isEditButtonVisable = !editMode && authState.id === user.id;
 
@@ -19,14 +19,14 @@ export function ProfileCard({ user }) {
   return (
     <div className="card">
       <div className="card-header text-center">
-        <ProfileImage width={200} />
+        <ProfileImage width={200}  tempImage={tempImage} image={user.image}/>
       </div>
       <div className="card-body text-center">
         {editMode && <span className="fs-3 d-block">{visibleUsername}</span>}
         {isEditButtonVisable && (
           <Button onClick={() => setEditMode(true)}>Edit</Button>
         )}
-        {editMode && <UserEditForm setEditMode={setEditMode} />}
+        {editMode && <UserEditForm setEditMode={setEditMode} setTempImage={setTempImage}/>}
       </div>
     </div>
   );

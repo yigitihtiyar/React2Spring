@@ -17,10 +17,13 @@ public class CurrentUser implements UserDetails {
 
     String password;
 
+    boolean enabled;
+
     public CurrentUser(User user) {
         this.id = user.getId();
         this.username = user.getUsername();
         this.password = user.getPassword();
+        this.enabled = user.isActive();
     }
 
 
@@ -65,7 +68,7 @@ public class CurrentUser implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return enabled;
     }
 
 

@@ -20,8 +20,6 @@ public class ApiError
     private Map<String,String> validationErrors = null;
 
 
-
-    
     public Map<String, String> getValidationErrors() {
         return validationErrors;
     }

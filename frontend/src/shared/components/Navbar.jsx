@@ -43,7 +43,7 @@ export function Navbar() {
               <>
                 <li className="navbar-item">
                   <Link className="nav-link" to={`/user/${authState.id}`}>
-                    <ProfileImage width={30} />
+                    <ProfileImage width={30} image={authState.image}/>
                     <span className="ms-1">{authState.username}</span>
                   </Link>
                 </li>

@@ -30,7 +30,7 @@ public class WsApplication {
 				userRepository.save(user);
 				
 			}
-			throw new UnsupportedOperationException("Unimplemented method 'run'");
+			
 		};
 
 	}
