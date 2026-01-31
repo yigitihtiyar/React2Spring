@@ -1,6 +1,5 @@
 package com.example.ws.user;
 
-
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -9,21 +8,20 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.mail.MailException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import com.example.ws.configuration.CurrentUser;
 import com.example.ws.email.EmailService;
+import com.example.ws.file.FileService;
 import com.example.ws.user.dto.UserUpdate;
 import com.example.ws.user.exception.ActivationNotificationException;
 import com.example.ws.user.exception.InvalidTokenException;
 import com.example.ws.user.exception.NotFoundException;
 import com.example.ws.user.exception.NotUniqueEmailException;
-
 import jakarta.transaction.Transactional;
 
 @Service
 public class UserService {
 
-  @Autowired 
+  @Autowired
   UserRepository userRepository;
 
   @Autowired
@@ -31,6 +29,9 @@ public class UserService {
 
   @Autowired
   EmailService emailService;
+
+  @Autowired
+  FileService fileService;
 
   @Transactional(rollbackOn = MailException.class)
   public void save(User user) {
@@ -58,19 +59,18 @@ public class UserService {
     userRepository.save(user);
   }
 
-  public Page<User> getUsers(Pageable page,CurrentUser currentUser) {
-    if(currentUser == null)
-      {
-         return userRepository.findAll(page);
-      }
+  public Page<User> getUsers(Pageable page, CurrentUser currentUser) {
+    if (currentUser == null) {
+      return userRepository.findAll(page);
+    }
 
-      return userRepository.findByIdNot(currentUser.getId(),page);
-   
+    return userRepository.findByIdNot(currentUser.getId(), page);
+
   }
 
   public User getUser(long id) {
     return userRepository.findById(id).orElseThrow(() -> new NotFoundException(id));
- 
+
   }
 
   public User findByEmail(String email) {
@@ -78,12 +78,15 @@ public class UserService {
   }
 
   public User updateUser(long id, UserUpdate userUpdate) {
-   
-      User inDB = getUser(id);
-      inDB.setUsername(userUpdate.username());
-      inDB.setImage(userUpdate.image());
-      return userRepository.save(inDB);
-   
+
+    User inDB = getUser(id);
+    inDB.setUsername(userUpdate.username());
+    if (userUpdate.image() != null) {
+      String fileName = fileService.saveBase64StringAsFile(userUpdate.image());
+      inDB.setImage(fileName);
+    }
+    return userRepository.save(inDB);
+
   }
 
 }

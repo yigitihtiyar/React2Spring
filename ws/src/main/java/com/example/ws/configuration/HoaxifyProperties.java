@@ -9,7 +9,18 @@ public class HoaxifyProperties {
     private Email email;
 
     private Client client;
+
+    private Storage storage = new Storage();
     
+
+
+    public Storage getStorage() {
+        return storage;
+    }
+
+    public void setStorage(Storage storage) {
+        this.storage = storage;
+    }
 
     public static record Email(
             String username,
@@ -25,6 +36,27 @@ public class HoaxifyProperties {
             String host
 
     ) {
+    }
+
+    public static class  Storage {
+    
+         String root = "uploads";
+         String profile = "profile";
+
+
+         public String getRoot() {
+            return root;
+        }
+         public void setRoot(String root) {
+             this.root = root;
+         }
+        
+         public String getProfile() {
+             return profile;
+         }
+         public void setProfile(String profile) {
+             this.profile = profile;
+         }
     }
 
     public Email getEmail() {
