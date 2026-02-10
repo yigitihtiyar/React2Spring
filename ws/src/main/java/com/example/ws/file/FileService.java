@@ -3,6 +3,7 @@ package com.example.ws.file;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Base64;
@@ -25,7 +26,7 @@ public class FileService {
     public String saveBase64StringAsFile(String image) {
         String fileName = UUID.randomUUID().toString();
 
-        Path path = Paths.get(hoaxifyProperties.getStorage().getRoot(),hoaxifyProperties.getStorage().getProfile(),fileName);
+        Path path = getProfileImage(fileName);
         
         try {
             OutputStream outputStream = new FileOutputStream(path.toFile());
@@ -47,6 +48,23 @@ public class FileService {
     private byte[] decodedImage(String encodedImage)
     {
         return Base64.getDecoder().decode(encodedImage.split(",")[1]);
+    }
+
+    public void deleteProfileImage(String image) {
+       
+       if(image == null) return;
+        Path path = getProfileImage(image);
+        try {
+            Files.deleteIfExists(path);
+        } catch (IOException e) {
+            
+            e.printStackTrace();
+        }
+    }
+
+    private Path getProfileImage(String fileName)
+    {
+      return Paths.get(hoaxifyProperties.getStorage().getRoot(),hoaxifyProperties.getStorage().getProfile(),fileName);
     }
 
 }

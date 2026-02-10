@@ -9,8 +9,8 @@ public record UserUpdate(
     @NotBlank(message = "{hoaxify.constraint.username.notblank}")
     @Size(min=4, max=255)
     String username,
-    
-    @FileType
+
+    @FileType(types = {"jpeg","png"})
     String image)
  {
     
