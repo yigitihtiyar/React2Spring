@@ -1,13 +1,10 @@
 package com.example.ws.auth.token;
 
 import javax.crypto.SecretKey;
-
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
-
 import com.example.ws.auth.dto.Credentials;
 import com.example.ws.user.User;
-
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
@@ -32,7 +29,7 @@ public class JwtTokenService implements TokenService {
     public User verifyToken(String authorizationHeader) {
         if (authorizationHeader == null)
             return null;
-        var token = authorizationHeader.split("Bearer")[1];
+        var token = authorizationHeader.split(" ")[1];
         JwtParser parser = Jwts.parserBuilder().setSigningKey(key).build();
         try {
             Jws<Claims> claims = parser.parseClaimsJws(token);
