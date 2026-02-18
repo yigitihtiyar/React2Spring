@@ -36,27 +36,14 @@ public class TokenFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
-        String authorizationHeader = request.getHeader("Authorization");
-        if (authorizationHeader != null) {
-            User user = tokenService.verifyToken(authorizationHeader);
+        String tokenWithPrefix = getTokenWithPrefix(request);
+        if (tokenWithPrefix != null) {
+            User user = tokenService.verifyToken(tokenWithPrefix);
             if (user != null) {
                 if (!user.isActive()) {
                     exceptionResolver.resolveException(request, response, user,
                             new DisabledException("user is disabled"));
-                    // throw new DisabledException("User is disabled");
-                    // ApiError apiError = new ApiError();
-                    // apiError.setStatus(401);
-                    // apiError.setMessage("user is disabled");
-                    // apiError.setPath(request.getRequestURI());
-                    // ObjectMapper objectMapper = new ObjectMapper();
-
-                    // response.setStatus(401);
-                    // response.setContentType("application/json");
-                    // OutputStream os = response.getOutputStream();
-                    // objectMapper.writeValue(os, apiError);
-                    // os.flush();
-                    // return;
-
+                            return;
                 }
                 CurrentUser currentUser = new CurrentUser(user);
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(user,
@@ -67,6 +54,20 @@ public class TokenFilter extends OncePerRequestFilter {
         }
         filterChain.doFilter(request, response);
 
+    }
+
+    private String getTokenWithPrefix(HttpServletRequest request)
+    {
+       var tokenWithPrefix = request.getHeader("Authorization");
+       var cookies = request.getCookies();
+       if(cookies == null) return tokenWithPrefix;
+       for ( var cookie:cookies)
+        {
+            if(cookie.getName().equals("hoax-token")) continue;
+            if(cookie.getValue()== null || cookie.getValue().isEmpty()) continue;
+            return "AnyPrefix" + cookie.getValue();
+        }
+        return tokenWithPrefix;
     }
 
 }

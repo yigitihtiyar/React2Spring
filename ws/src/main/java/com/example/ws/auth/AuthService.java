@@ -35,7 +35,12 @@ public class AuthService {
          authResponse.setToken(token);
          authResponse.setUser(new UserDTO(inDB));
          return authResponse;
-       //
+       
+    }
+
+    public void logout(String authorizationHeader) {
+        tokenService.logout(authorizationHeader);
+        throw new UnsupportedOperationException("Unimplemented method 'logout'");
     }
     
 }

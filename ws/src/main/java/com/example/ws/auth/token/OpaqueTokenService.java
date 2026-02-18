@@ -1,5 +1,6 @@
 package com.example.ws.auth.token;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,14 +22,33 @@ public class OpaqueTokenService implements TokenService {
         String randomValue = UUID.randomUUID().toString();
         Token token = new Token();
         token.setToken(randomValue);
-        token.setUser(user); 
+        token.setUser(user);
         return tokenRepository.save(token);
     }
 
     @Override
     public User verifyToken(String authorizationHeader) {
-        
-        throw new UnsupportedOperationException("Unimplemented method 'verifyToken'");
+
+        var tokenInDB = getToken(authorizationHeader);
+        if (!tokenInDB.isPresent())
+            return null;
+        return tokenInDB.get().getUser();
+
+    }
+
+    @Override
+    public void logout(String authorizationHeader) {
+        var tokenInDB = getToken(authorizationHeader);
+        if (authorizationHeader == null)
+            return;
+        tokenRepository.delete(tokenInDB.get());
+    }
+
+    private Optional<Token> getToken(String authorizationHeader) {
+        if (authorizationHeader == null)
+            return Optional.empty();
+        var token = authorizationHeader.split(" ")[1];
+        return tokenRepository.findById(token);
     }
 
 }

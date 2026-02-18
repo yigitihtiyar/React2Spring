@@ -1,8 +1,9 @@
 import { useTranslation } from "react-i18next";
-import { AuthContext} from "../state/Context";
+import { AuthContext } from "../../state/Context";
 import { useDispatch, useSelector } from "react-redux";
-import { logoutSuccess } from "../state/redux";
-import { ProfileImage } from "./ProfileImage";
+import { logoutSuccess } from "../../state/redux";
+import { ProfileImage } from "../ProfileImage";
+import { Logout } from "./api";
 
 export function Navbar() {
   const { t } = useTranslation();
@@ -11,11 +12,15 @@ export function Navbar() {
   const authState = useSelector((store) => store.auth);
   const dispatch = useDispatch();
 
-
- const onClickLogout = () => {
-  dispatch(logoutSuccess());
- }
-
+  const onClickLogout = async () => {
+    try {
+      await Logout();
+    } catch {
+      //
+    } finally {
+      dispatch(logoutSuccess());
+    }
+  };
 
   return (
     <>
@@ -43,16 +48,18 @@ export function Navbar() {
               <>
                 <li className="navbar-item">
                   <Link className="nav-link" to={`/user/${authState.id}`}>
-                    <ProfileImage width={30} image={authState.image}/>
+                    <ProfileImage width={30} image={authState.image} />
                     <span className="ms-1">{authState.username}</span>
                   </Link>
                 </li>
                 <li className="navbar-item">
-                  <span className="nav-link"
-                   role="button"
-                   onClick={onClickLogout}>
+                  <span
+                    className="nav-link"
+                    role="button"
+                    onClick={onClickLogout}
+                  >
                     Logout
-                    </span>
+                  </span>
                 </li>
               </>
             )}

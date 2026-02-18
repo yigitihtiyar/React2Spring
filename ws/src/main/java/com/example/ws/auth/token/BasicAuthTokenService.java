@@ -16,7 +16,6 @@ import com.example.ws.user.UserService;
 public class BasicAuthTokenService  implements TokenService
 {
 
-
     @Autowired
     UserService userService;
 
@@ -42,5 +41,10 @@ public class BasicAuthTokenService  implements TokenService
         if(inDB == null) return null;
         if(!passwordEncoder.matches(password, inDB.getPassword())) return null;
         return inDB;
+    }
+
+    @Override
+    public void logout(String authorizationHeader) {
+    
     }
 }
