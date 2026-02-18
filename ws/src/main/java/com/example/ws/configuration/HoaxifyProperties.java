@@ -12,7 +12,9 @@ public class HoaxifyProperties {
 
     private Storage storage = new Storage();
     
+    private String tokenType;
 
+    
 
     public Storage getStorage() {
         return storage;
@@ -73,6 +75,14 @@ public class HoaxifyProperties {
 
     public void setClient(Client client) {
         this.client = client;
+    }
+
+    public String getTokenType() {
+        return tokenType;
+    }
+
+    public void setTokenType(String tokenType) {
+        this.tokenType = tokenType;
     }
 
 }

@@ -3,6 +3,7 @@ package com.example.ws.auth.token;
 import java.util.Base64;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.example.ws.auth.dto.Credentials;
@@ -11,6 +12,7 @@ import com.example.ws.user.UserService;
 
 
 @Service
+@ConditionalOnProperty(name = "hoaxify.token-type",havingValue = "basic")
 public class BasicAuthTokenService  implements TokenService
 {
 
