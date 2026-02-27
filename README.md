@@ -15,7 +15,7 @@
 ### 🔹 Frontend
 - React
 - Functional Components
-- React Hooks (useState, useEffect vb.)
+- React Hooks (useState, useEffect, custom hooks vb.)
 - Context API
 - Redux (State Management)
 - React Router
