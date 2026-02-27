@@ -69,4 +69,23 @@ public class EmailService {
     }
     this.mailSender.send(mimeMessage);
   }
+
+  public void sendPasswordResetEmail(String email, String passwordResetToken) {
+    String passwordResetUrl = hoaxifyProperties.getClient().host() + "/passeord-reset/set?tk=" + passwordResetToken;
+    MimeMessage mimeMessage = mailSender.createMimeMessage();
+    MimeMessageHelper message = new MimeMessageHelper(mimeMessage, "UTF-8");
+    var title = "Reset Your Password";
+    var clickHere = messageSource.getMessage("hoaxify.mail.click.here", null, LocaleContextHolder.getLocale());
+    var mailBody = activationEmail.replace("${url}", passwordResetUrl).replace("${title}", title)
+        .replace("${clickHere}", clickHere);
+    try {
+      message.setFrom(hoaxifyProperties.getEmail().from());
+      message.setTo(email);
+      message.setSubject(title);
+      message.setText(mailBody, true);
+    } catch (MessagingException e) {
+      e.printStackTrace();
+    }
+    this.mailSender.send(mimeMessage);
+  }
 }

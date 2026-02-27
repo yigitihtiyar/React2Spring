@@ -10,13 +10,16 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.example.ws.configuration.CurrentUser;
 import com.example.ws.email.EmailService;
+import com.example.ws.email.PasswordResetRequest;
 import com.example.ws.file.FileService;
+import com.example.ws.user.dto.PasswordUpdate;
 import com.example.ws.user.dto.UserUpdate;
 import com.example.ws.user.exception.ActivationNotificationException;
 import com.example.ws.user.exception.InvalidTokenException;
 import com.example.ws.user.exception.NotFoundException;
 import com.example.ws.user.exception.NotUniqueEmailException;
 import jakarta.transaction.Transactional;
+
 
 @Service
 public class UserService {
@@ -88,6 +91,38 @@ public class UserService {
     }
     return userRepository.save(inDB);
 
+  }
+
+  public void deleteUser(long id) {
+    User inDB = getUser(id);
+    if (inDB.getImage() != null) {
+      fileService.deleteProfileImage(inDB.getImage());
+    }
+    userRepository.delete(inDB);
+  }
+
+  public void handleResetRequest(PasswordResetRequest passwordResetRequest) {
+    User inDB = findByEmail(passwordResetRequest.email());
+    if (inDB == null) {
+      throw new NotFoundException(0);
+    }
+    inDB.setPasswordResetToken(UUID.randomUUID().toString());
+    this.userRepository.save(inDB);
+    this.emailService.sendPasswordResetEmail(inDB.getEmail(), inDB.getPasswordResetToken());
+
+  }
+
+  public void updatePassword(String token, PasswordUpdate passwordUpdate) {
+   
+    User inDB = userRepository.findByPasswordResetToken(token);
+    if (inDB == null) {
+      throw new InvalidTokenException();
+    }
+    inDB.setPassword(passwordEncoder.encode(passwordUpdate.password()));
+    inDB.setPasswordResetToken(null);
+    inDB.setActive(true);
+    inDB.setActivationToken(null);
+    userRepository.save(inDB);
   }
 
 }

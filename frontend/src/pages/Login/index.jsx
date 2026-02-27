@@ -4,7 +4,7 @@ import { Alert } from "@/shared/components/Alert";
 import { Input } from "../../shared/components/Input";
 import { login } from "./api";
 import { AuthContext } from "@/shared/state/context";
-import {  useNavigate } from "react-router-dom";
+import {  Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
 export function Login() {
@@ -96,6 +96,9 @@ export function Login() {
                 {t("login")}
               </Button>
             </div>
+          </div>
+          <div className="card-footer text-center">
+            <Link to="password-reset/request">Forget Password?</Link>
           </div>
         </form>
       </div>

@@ -1,13 +1,21 @@
 package com.example.ws.user;
 
+import java.util.List;
+
+
+
+import com.example.ws.auth.token.Token;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+
 
 
 @Entity 
@@ -31,6 +39,19 @@ public class User {
     @Lob
     String image;
 
+    @OneToMany(mappedBy = "user",cascade = CascadeType.REMOVE)
+    List<Token> tokens;
+
+    String passwordResetToken;
+
+
+
+    public String getPasswordResetToken() {
+        return passwordResetToken;
+    }
+    public void setPasswordResetToken(String passwordResetToken) {
+        this.passwordResetToken = passwordResetToken;
+    }
     public String getImage() {
         return image;
     }

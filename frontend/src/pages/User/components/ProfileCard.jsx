@@ -4,14 +4,15 @@ import { useSelector } from "react-redux";
 import { useState } from "react";
 import { ProfileImage } from "@/shared/components/ProfileImage";
 import { UserEditForm } from "./UserEditForm";
+import { UserDeleteButton } from "./UserDeleteButton";
 
 export function ProfileCard({ user }) {
   //const authState = useAuthState();
   const authState = useSelector((store) => store.auth);
   const [editMode, setEditMode] = useState(false);
-  const [tempImage , setTempImage] = useState();
+  const [tempImage, setTempImage] = useState();
 
-  const isEditButtonVisable = !editMode && authState.id === user.id;
+  const isLoggedInUser = !editMode && authState.id === user.id;
 
   const visibleUsername =
     authState.id === user.id ? authState.username : user.username;
@@ -19,14 +20,21 @@ export function ProfileCard({ user }) {
   return (
     <div className="card">
       <div className="card-header text-center">
-        <ProfileImage width={200}  tempImage={tempImage} image={user.image}/>
+        <ProfileImage width={200} tempImage={tempImage} image={user.image} />
       </div>
       <div className="card-body text-center">
         {editMode && <span className="fs-3 d-block">{visibleUsername}</span>}
-        {isEditButtonVisable && (
-          <Button onClick={() => setEditMode(true)}>Edit</Button>
+        {isLoggedInUser && (
+          <>
+            <Button onClick={() => setEditMode(true)}>Edit</Button>
+            <div className="d-inline m-1"></div>
+            <UserDeleteButton />
+          
+          </>
         )}
-        {editMode && <UserEditForm setEditMode={setEditMode} setTempImage={setTempImage}/>}
+        {editMode && (
+          <UserEditForm setEditMode={setEditMode} setTempImage={setTempImage} />
+        )}
       </div>
     </div>
   );

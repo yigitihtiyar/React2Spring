@@ -13,7 +13,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity(prePostEnabled = true) 
+@EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration {
 
     @Autowired
@@ -22,10 +22,11 @@ public class SecurityConfiguration {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests((authentication) -> authentication
-              
-  .requestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.PUT, "/api/v1/users/{id}")).authenticated()
-                .anyRequest().permitAll()
-        );
+
+                .requestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.PUT, "/api/v1/users/{id}")).authenticated()
+                .requestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.DELETE, "/api/v1/users/{id}"))
+                .authenticated()
+                .anyRequest().permitAll());
 
         http.httpBasic(httpbasic -> httpbasic.authenticationEntryPoint(new AuthEntryPoint()));
 
@@ -37,7 +38,5 @@ public class SecurityConfiguration {
 
         return http.build();
     }
-
- 
 
 }

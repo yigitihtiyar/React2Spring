@@ -6,6 +6,7 @@ import { Activation } from "../pages/Activation/index.jsx";
 import { Component } from "react";
 import { User } from "@/pages/User/index.jsx";
 import { Login } from "@/pages/Login/index.jsx";
+import { PasswordResetRequest } from "@/pages/PasswordResetRequest/Request/api.js";
 
 export default createBrowserRouter([
   {
@@ -33,6 +34,10 @@ export default createBrowserRouter([
         path: "/login",
         Component: Login,
       },
+      {
+        path: "/password-reset/request",
+        Component: PasswordResetRequest
+      }
     ],
   },
 ]);
